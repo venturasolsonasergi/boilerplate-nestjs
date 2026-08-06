@@ -1,0 +1,82 @@
+{
+  "features": [
+    {
+      "id": "spec-branch-lifecycle",
+      "title": "Automatic feature branch creation tied to OpenSpec",
+      "status": "proposed",
+      "priority": "high",
+      "description": "When a spec change is detected (new version or x-spec-id in openapi.yaml), automatically create a git branch feature/<service>-<spec-id> before generating artifacts.",
+      "motivation": "Isolate each spec iteration in its own branch, making it traceable from OpenSpec change to git history.",
+      "design": {
+        "branchNaming": {
+          "optionA": "feature/<service>-spec-v<info.version> — derived from semver in openapi.yaml info block",
+          "optionB": "feature/<service>-<x-spec-id> — derived from a custom x-spec-id extension field in openapi.yaml info block (preferred: more semantic)",
+          "recommendation": "optionB"
+        },
+        "triggerPoint": "scripts/workflows/index.ts propose() — before generateFromSpec()",
+        "implementation": {
+          "newUtilities": [
+            "runtime.ts: gitBranchExists(branch: string): boolean",
+            "runtime.ts: gitCheckoutBranch(branch: string): void"
+          ],
+          "specIdResolution": "Read info.x-spec-id (or info.version fallback) from src/<service>/specs/openspec/openapi.yaml",
+          "changeDetection": "Compare openapi.yaml info.version against microservice.json specVersion field"
+        }
+      },
+      "affectedFiles": [
+        "scripts/utils/runtime.ts",
+        "scripts/commands/index.ts",
+        "scripts/workflows/index.ts",
+        "src/<service>/specs/openspec/openapi.yaml"
+      ]
+    },
+    {
+      "id": "spec-scope-validation",
+      "title": "Spec scope guard — prevent modifications outside service boundary",
+      "status": "proposed",
+      "priority": "high",
+      "description": "A new check:spec-scope command validates that all modified files (git diff --name-only HEAD) are within src/<service>/ when working on a feature branch for that service.",
+      "motivation": "Enforce the SDD contract: a spec change should only affect the files it declares it generates or modifies.",
+      "design": {
+        "allowedPaths": [
+          "src/<service>/specs/generated/",
+          "src/<service>/specs/contracts/",
+          "src/<service>/application/",
+          "src/<service>/domain/",
+          "src/<service>/infrastructure/"
+        ],
+        "conditionallyAllowed": [
+          "src/shared/ — allowed if the service explicitly declares a shared dependency"
+        ],
+        "forbidden": [
+          "src/<other-service>/",
+          "src/app.module.ts (unless it is a new service registration)",
+          "Root config files"
+        ],
+        "triggerPoint": "scripts/workflows/index.ts verify() — after existing validation gates",
+        "newCommand": "microservice:check-spec-scope --service <name>"
+      },
+      "affectedFiles": [
+        "scripts/commands/index.ts",
+        "scripts/workflows/index.ts",
+        "scripts/cli.ts",
+        "package.json"
+      ]
+    }
+  ],
+  "workflowImpact": {
+    "updatedPipeline": [
+      "openapi.yaml edited with new version or x-spec-id",
+      "pnpm propose → detect spec change → git checkout -b feature/<service>-<spec-id> → generateFromSpec()",
+      "pnpm apply → generateFromSpec() + checkDependencies()",
+      "pnpm verify → existing gates + check:spec-scope",
+      "pnpm commit_flow → guard: assert current branch matches feature/* pattern"
+    ]
+  },
+  "openQuestions": [
+    "Use x-spec-id extension field in openapi.yaml (optionB) or derive branch name from semver (optionA)?",
+    "Should src/shared/ changes be allowed within a spec scope without explicit declaration?",
+    "Should commit_flow hard-fail if not on a feature/* branch, or just warn?"
+  ],
+  "discussedOn": "2026-08-06"
+}
