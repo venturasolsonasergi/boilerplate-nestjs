@@ -13,7 +13,7 @@ const targets = [
 ];
 
 const forbiddenByLayer = {
-  domain: ['@nestjs/', '@prisma/client', 'zod', 'src/shared-validation'],
+  domain: ['@nestjs/', '@prisma/client', 'zod', 'src/shared/validation'],
   application: ['@prisma/client'],
 };
 

@@ -4,7 +4,7 @@ import path from 'node:path';
 
 const root = process.cwd();
 const domainRoots = ['src/users/domain', 'src/orders/domain'];
-const forbidden = ['@nestjs/', '@prisma/client', 'zod', 'src/shared-validation'];
+const forbidden = ['@nestjs/', '@prisma/client', 'zod', 'src/shared/validation'];
 const violations = [];
 
 function walk(dir, all = []) {

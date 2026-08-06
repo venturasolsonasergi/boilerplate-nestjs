@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "ignoreDeprecations": "5.0",
+    "rootDir": ".",
+    "outDir": "./dist-scripts",
+    "declaration": false,
+    "sourceMap": false,
+    "incremental": false
+  },
+  "include": ["scripts/**/*.ts"]
+}
