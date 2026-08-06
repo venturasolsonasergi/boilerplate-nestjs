@@ -1,0 +1,15 @@
+{
+  "name": "orders",
+  "version": "0.1.0",
+  "specVersion": "0.1.0",
+  "domainVersion": "0.1.0",
+  "dependencies": {
+    "internal": [],
+    "external": [
+      "@nestjs/common",
+      "@nestjs/core",
+      "@prisma/client",
+      "zod"
+    ]
+  }
+}

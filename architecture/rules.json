@@ -1,0 +1,16 @@
+{
+  "deliveryFlow": ["spec", "domain", "application", "infrastructure"],
+  "dependencyDirection": ["infrastructure", "application", "domain"],
+  "forbiddenImports": {
+    "domain": ["@nestjs/*", "@prisma/client", "zod"],
+    "application": ["@prisma/client"]
+  },
+  "allowedSharedUsage": {
+    "domain": ["src/shared-domain"],
+    "application": ["src/shared-domain", "src/shared-validation"],
+    "infrastructure": ["src/shared-domain", "src/shared-validation"]
+  },
+  "autonomy": {
+    "forbidCrossMicroserviceDomainImports": true
+  }
+}

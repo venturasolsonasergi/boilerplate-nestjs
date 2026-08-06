@@ -1,0 +1,13 @@
+{
+  "service": "users",
+  "source": "./openspec/openapi.yaml",
+  "output": {
+    "generated": "./generated",
+    "contracts": "./contracts"
+  },
+  "artifacts": [
+    "dtos",
+    "schemas",
+    "transport-stubs"
+  ]
+}
