@@ -5,25 +5,20 @@ import { discoverServices, hasFilesRecursive, resolveServicePaths } from '../uti
 import { ROOT_DIR, runCommand, runCommandOk, runNodeScript, utcTimestamp } from '../utils/runtime';
 
 export function microserviceGenerateFromSpec(service: string): void {
-  const { spec, generatedDir, generated } = resolveServicePaths(service);
+  const { spec } = resolveServicePaths(service);
   if (!existsSync(spec)) {
     throw new Error(`[${service}] Missing OpenSpec source at ${spec}`);
   }
 
-  mkdirSync(generatedDir, { recursive: true });
-  writeFileSync(generated, `// generated at ${utcTimestamp()}\n`, { encoding: 'utf8' });
-  console.log(`[${service}] Generation completed`);
+  console.log(`[${service}] OpenSpec source validated`);
 }
 
 export function microserviceCheckSpecDrift(service: string): void {
-  const { spec, generated } = resolveServicePaths(service);
+  const { spec } = resolveServicePaths(service);
   if (!existsSync(spec)) {
     throw new Error(`[${service}] Missing OpenSpec source`);
   }
-  if (!existsSync(generated)) {
-    throw new Error(`[${service}] Missing generated artifact`);
-  }
-  console.log(`[${service}] Spec drift check passed`);
+  console.log(`[${service}] OpenSpec source check passed`);
 }
 
 export function microserviceRunContractTests(service: string): void {
@@ -70,11 +65,11 @@ export function generateMicroserviceHealthReport(): void {
   lines.push('');
 
   for (const service of discoverServices()) {
-    const { spec, serviceRoot, generated } = resolveServicePaths(service);
+    const { spec, serviceRoot } = resolveServicePaths(service);
     const domainDir = join(serviceRoot, 'domain');
 
     lines.push(`## ${service}`);
-    lines.push(`- spec: ${existsSync(spec) && existsSync(generated) ? 'ok' : 'missing'}`);
+    lines.push(`- spec: ${existsSync(spec) ? 'ok' : 'missing'}`);
     lines.push(`- domain: ${existsSync(domainDir) && hasFilesRecursive(domainDir) ? 'ok' : 'missing'}`);
     lines.push(
       `- dependencies: ${runCommandOk('node', ['architecture/validation-engine/check-dependencies.mjs']) ? 'ok' : 'failed'}`,

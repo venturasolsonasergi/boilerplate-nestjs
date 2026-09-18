@@ -1,0 +1,139 @@
+openapi: 3.0.3
+info:
+  title: Users Service API
+  version: 0.2.0
+  x-spec-id: create-user
+paths:
+  /users/health:
+    get:
+      operationId: usersHealth
+      responses:
+        '200':
+          description: Service health status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+  /users:
+    post:
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserRequest'
+      responses:
+        '201':
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
+        '409':
+          description: Email already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConflictError'
+components:
+  schemas:
+    CreateUserRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - name
+        - surname
+        - email
+        - address
+        - phone
+      properties:
+        name:
+          type: string
+          minLength: 1
+        surname:
+          type: string
+          minLength: 1
+        email:
+          type: string
+          format: email
+          minLength: 1
+        address:
+          type: string
+          minLength: 1
+        phone:
+          type: string
+          minLength: 1
+    UserResponse:
+      type: object
+      required:
+        - id
+        - name
+        - surname
+        - email
+        - address
+        - phone
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        surname:
+          type: string
+        email:
+          type: string
+          format: email
+        address:
+          type: string
+        phone:
+          type: string
+    HealthResponse:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          enum: [ok]
+    BadRequestError:
+      type: object
+      required:
+        - statusCode
+        - message
+        - error
+      properties:
+        statusCode:
+          type: integer
+          enum: [400]
+        message:
+          oneOf:
+            - type: string
+            - type: array
+              items:
+                type: string
+        error:
+          type: string
+          enum: [Bad Request]
+    ConflictError:
+      type: object
+      required:
+        - statusCode
+        - message
+        - error
+      properties:
+        statusCode:
+          type: integer
+          enum: [409]
+        message:
+          type: string
+          enum: [Email already exists]
+        error:
+          type: string
+          enum: [Conflict]

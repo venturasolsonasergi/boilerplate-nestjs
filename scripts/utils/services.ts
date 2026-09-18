@@ -24,15 +24,11 @@ export function discoverServices(): string[] {
 export function resolveServicePaths(service: string): {
   serviceRoot: string;
   spec: string;
-  generatedDir: string;
-  generated: string;
 } {
   const serviceRoot = join(ROOT_DIR, 'src', service);
-  const spec = join(serviceRoot, 'specs', 'openspec', 'openapi.yaml');
-  const generatedDir = join(serviceRoot, 'specs', 'generated');
-  const generated = join(generatedDir, 'index.ts');
+  const spec = join(serviceRoot, 'specs', 'openapi.yaml');
 
-  return { serviceRoot, spec, generatedDir, generated };
+  return { serviceRoot, spec };
 }
 
 export function requireServiceArg(value?: string): string {

@@ -20,12 +20,12 @@ the next command. Use this when you want fine-grained control over each transiti
 
 /new
   Reads: spec-context.md
-  Updates: src/<service>/specs/openspec/openapi.yaml (paths, schemas, version, x-spec-id)
+  Updates: src/<service>/specs/openapi.yaml (paths, schemas, version, x-spec-id)
   Checkpoint: "¿OpenSpec correcto? ¿Continúo con /ff?"
 
 /ff
   Runs: pnpm generate:spec
-  Shows: generated artifacts in specs/generated/
+  Validates: specs/openapi.yaml for every discovered service
   Checkpoint: "¿Artefactos correctos? ¿Continúo con /apply?"
 
   ── Human validation: review DDD model + OpenAPI before proceeding ──
@@ -78,8 +78,7 @@ DDD model is proposed and before any code generation starts.
 | File | Written by | Read by |
 |---|---|---|
 | `src/<service>/specs/context/spec-context.md` | `/enrich-us` | `/new`, `/code-review` |
-| `src/<service>/specs/openspec/openapi.yaml` | `/new` | `/ff`, `/apply`, `/verify` |
-| `src/<service>/specs/generated/index.ts` | `/ff` | `/apply`, `/verify` |
+| `src/<service>/specs/openapi.yaml` | `/new` | `/ff`, `/apply`, `/verify` |
 | `.agents/config.json` | static | `/verify` (loop limit) |
 
 ---

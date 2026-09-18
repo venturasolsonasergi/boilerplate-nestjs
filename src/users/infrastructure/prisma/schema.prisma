@@ -8,5 +8,10 @@ datasource db {
 }
 
 model UserRecord {
-  id String @id
+  id      Int    @id @default(autoincrement())
+  name    String
+  surname String
+  email   String @unique
+  address String
+  phone   String
 }

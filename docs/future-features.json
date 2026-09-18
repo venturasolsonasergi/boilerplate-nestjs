@@ -19,7 +19,7 @@
             "runtime.ts: gitBranchExists(branch: string): boolean",
             "runtime.ts: gitCheckoutBranch(branch: string): void"
           ],
-          "specIdResolution": "Read info.x-spec-id (or info.version fallback) from src/<service>/specs/openspec/openapi.yaml",
+          "specIdResolution": "Read info.x-spec-id (or info.version fallback) from src/<service>/specs/openapi.yaml",
           "changeDetection": "Compare openapi.yaml info.version against microservice.json specVersion field"
         }
       },
@@ -27,7 +27,7 @@
         "scripts/utils/runtime.ts",
         "scripts/commands/index.ts",
         "scripts/workflows/index.ts",
-        "src/<service>/specs/openspec/openapi.yaml"
+        "src/<service>/specs/openapi.yaml"
       ]
     },
     {
@@ -39,8 +39,7 @@
       "motivation": "Enforce the SDD contract: a spec change should only affect the files it declares it generates or modifies.",
       "design": {
         "allowedPaths": [
-          "src/<service>/specs/generated/",
-          "src/<service>/specs/contracts/",
+          "src/<service>/specs/",
           "src/<service>/application/",
           "src/<service>/domain/",
           "src/<service>/infrastructure/"

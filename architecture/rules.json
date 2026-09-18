@@ -11,6 +11,12 @@
     "infrastructure": ["src/shared/domain", "src/shared/validation"]
   },
   "autonomy": {
-    "forbidCrossMicroserviceDomainImports": true
+    "forbidCrossMicroserviceDomainImports": true,
+    "forbidDirectCrossMicroserviceImports": true,
+    "crossMicroserviceIntegration": {
+      "allowed": ["publicApplicationApi", "domainEvents"],
+      "forbidden": ["directModuleImport", "directDomainImport"],
+      "description": "Microservices cannot import another microservice directly by path such as src/users or src/orders. Cross-microservice communication must happen only through public application APIs or published domain events."
+    }
   }
 }
