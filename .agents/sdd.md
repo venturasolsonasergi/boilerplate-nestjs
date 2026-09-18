@@ -38,7 +38,7 @@ Run these steps in sequence without pausing for confirmation:
 After ff, show a brief summary:
 - New `info.version` and `x-spec-id`
 - Paths added to `openapi.yaml`
-- Artifacts generated
+- OpenAPI source validated
 
 ## Phase 3 — Validation and commit preparation (automatic)
 

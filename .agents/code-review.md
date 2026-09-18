@@ -16,7 +16,7 @@ final quality checks and produce a ready-to-commit summary.
 
 Read the following to compose the commit message:
 - `src/<service>/specs/context/spec-context.md` — feature name and summary
-- `src/<service>/specs/openspec/openapi.yaml` — `info.x-spec-id` and `info.version`
+- `src/<service>/specs/openapi.yaml` — `info.x-spec-id` and `info.version`
 - Output of `git diff --name-only HEAD` — actual changed files
 
 Generate a conventional commit message following this format:

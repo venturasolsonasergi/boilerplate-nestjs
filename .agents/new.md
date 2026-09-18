@@ -6,13 +6,13 @@ model from `spec-context.md` into a valid OpenAPI 3.0.3 document.
 ## Inputs to read
 
 - `src/<service>/specs/context/spec-context.md` — the DDD model and scope (required)
-- `src/<service>/specs/openspec/openapi.yaml` — current spec to update (not replace)
+- `src/<service>/specs/openapi.yaml` — current spec to update (not replace)
 
 If `spec-context.md` does not exist, stop and tell the user to run `/enrich-us` first.
 
 ## What to generate
 
-Update `src/<service>/specs/openspec/openapi.yaml` following these rules:
+Update `src/<service>/specs/openapi.yaml` following these rules:
 
 1. **Preserve** existing paths and components — only add or update, never remove
 2. **Paths**: add one path per use case identified in spec-context.md
