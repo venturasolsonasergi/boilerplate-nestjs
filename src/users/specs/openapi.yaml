@@ -108,19 +108,40 @@ components:
         - statusCode
         - message
         - error
+        - details
       properties:
         statusCode:
           type: integer
           enum: [400]
         message:
-          oneOf:
-            - type: string
-            - type: array
-              items:
-                type: string
+          type: string
+          enum: [Validation failed]
         error:
           type: string
           enum: [Bad Request]
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationErrorDetail'
+    ValidationErrorDetail:
+      type: object
+      required:
+        - field
+        - code
+        - message
+      properties:
+        field:
+          type: string
+        code:
+          type: string
+          enum:
+            - required
+            - invalid_type
+            - too_small
+            - invalid_format
+            - unrecognized_keys
+        message:
+          type: string
     ConflictError:
       type: object
       required:

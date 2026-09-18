@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-17T16:42:23.828Z",
+  "generatedAt": "2026-09-18T06:55:21.027Z",
   "nodes": [
     "src\\app.controller.spec.ts",
     "src\\app.controller.ts",
@@ -15,6 +15,7 @@
     "src\\orders\\infrastructure\\orders.module.ts",
     "src\\orders\\infrastructure\\orders.repository.prisma.ts",
     "src\\orders\\tests\\orders.contract.spec.ts",
+    "src\\shared\\validation\\zod-validation-error.ts",
     "src\\users\\application\\create-user.use-case.ts",
     "src\\users\\application\\user.repository.ts",
     "src\\users\\domain\\user.domain-service.ts",

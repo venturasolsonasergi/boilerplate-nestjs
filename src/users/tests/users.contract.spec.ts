@@ -58,7 +58,30 @@ describe('users contract', () => {
       });
   });
 
-  it('rejects invalid and unknown fields', async () => {
+  it('returns descriptive details for missing fields', async () => {
+    await request(app.getHttpServer())
+      .post('/users')
+      .send({ name: 'Sergi', surname: 'Ventura Solsona' })
+      .expect(400)
+      .expect({
+        statusCode: 400,
+        message: 'Validation failed',
+        error: 'Bad Request',
+        details: [
+          { field: 'email', code: 'required', message: 'email is required' },
+          {
+            field: 'address',
+            code: 'required',
+            message: 'address is required',
+          },
+          { field: 'phone', code: 'required', message: 'phone is required' },
+        ],
+      });
+
+    expect(execute).not.toHaveBeenCalled();
+  });
+
+  it('rejects invalid and unknown fields with details', async () => {
     await request(app.getHttpServer())
       .post('/users')
       .send({
@@ -69,7 +92,34 @@ describe('users contract', () => {
         phone: '555',
         id: 9,
       })
-      .expect(400);
+      .expect(400)
+      .expect((response) => {
+        const body = response.body as {
+          message: string;
+          details: unknown[];
+        };
+
+        expect(body.message).toBe('Validation failed');
+        expect(body.details).toEqual(
+          expect.arrayContaining([
+            {
+              field: 'name',
+              code: 'too_small',
+              message: 'name cannot be empty',
+            },
+            {
+              field: 'email',
+              code: 'invalid_format',
+              message: 'email has an invalid format',
+            },
+            {
+              field: 'id',
+              code: 'unrecognized_keys',
+              message: 'id is not allowed',
+            },
+          ]),
+        );
+      });
 
     expect(execute).not.toHaveBeenCalled();
   });

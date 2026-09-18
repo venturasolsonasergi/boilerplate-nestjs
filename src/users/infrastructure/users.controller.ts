@@ -10,6 +10,7 @@ import {
 import { z } from 'zod';
 import { CreateUserUseCase } from '../application/create-user.use-case';
 import { EmailAlreadyExistsError } from '../application/user.repository';
+import { formatZodValidationErrors } from '../../shared/validation/zod-validation-error';
 
 const createUserSchema = z
   .object({
@@ -35,9 +36,12 @@ export class UsersController {
   async create(@Body() body: unknown) {
     const parsedBody = createUserSchema.safeParse(body);
     if (!parsedBody.success) {
-      throw new BadRequestException(
-        parsedBody.error.issues.map((issue) => issue.message),
-      );
+      throw new BadRequestException({
+        statusCode: 400,
+        error: 'Bad Request',
+        message: 'Validation failed',
+        details: formatZodValidationErrors(parsedBody.error),
+      });
     }
 
     try {
